@@ -9,30 +9,13 @@ $userid = $_GET['userid'];
 $name = $_GET['name'];
 $password = $_GET['password'];
 $memo = $_GET['memo'];
-$cmd = $_GET['cmd'] ? $_GET['cmd']:'insert';
+$cmd = $_GET['cmd'];
 
-if($cmd == 'update') {
-    $no = $_GET['no'];
-
-    $sql = "SELECT * from member where no=$no";
-    $rows = mysqli_query($db,$sql);
-    $row= mysqli_fetch_assoc($rows);
-
-    $userid = $row['userid'];
-    $name = $row['name'];
-    $password = $row['password'];
-    $memo = $row['memo'];
-
-
-
-} else if($cmd == 'insert') {
-    $userid = '';
-    $name = '';
-    $password = '';
-    $memo = '';
-
-
+if($cmd == "update"){
+    $sql = "UPDATE member SET userid = '$userid', name = '$name', password= '$password', memo='$memo' where no = '$no'";
+mysqli_query($db,$sql); 
 }
+
 if($cmd == "delete"){
     $sql= "delete from member where no =$no"; 
     mysqli_query($db,$sql);
@@ -44,30 +27,23 @@ if($cmd == "insert") {
     mysqli_query($db,$sql); 
 }
 
-if($cmd=="update"){
-    $sql = "UPDATE member SET userid='$userid',name='$name',password='$password,'memo='$memo' where no= '$no'";
-    mysqli_query($db,$sql); 
+
+
+$sql = "SELECT * FROM member"; 
+$result = mysqli_query($db,$sql);
+
+while($row= mysqli_fetch_assoc($result)){
+    echo $row['no']." ";
+    echo $row['userid']." ";
+    echo $row['name']." ";
+    echo $row['password']." ";
+    echo $row['memo']."<br>";
+
 
 }
-    $sql="select * from member";
-    $result = mysqli_query($db,$sql); 
-    while($rows= mysqli_fetch_assoc($result)) {
-        echo $rows['userid'];
-        echo $rows['name'];
-        echo $rows['password'];
-        echo $rows['memo'];
-        echo "<a class='button' href='member_prc.php?cmd=delete&no={$rows['no']}'>삭제</a>";
-        echo "<a class='button' href='member_prc.php?cmd=update&no={$rows['no']}'>수정</a>";
-        echo "<br>";
-    }
+
+mysqli_close($db);
+
 ?>
 
-<form method="GET" action="member_prc.php">
-    <input type="hidden" name="cmd" value="<?=$cmd?>"/>
-    <input type="hidden" name="no" value="<?=$no?>"/> 
-    <input type="text" name="userid" value="<?=$userid?>"/> 
-    <input type="text" name="name" value="<?=$name?>"/> 
-    <input type="text" name="password" value="<?=$password?>"/>
-    <input type="text" name="memo" value="<?=$memo?>"/>
-    <input type="submit"/>
-</form>
+<a href ="member_list.php">리스트로 돌아가기</a>
