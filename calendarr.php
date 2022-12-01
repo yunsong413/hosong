@@ -12,7 +12,6 @@
     $today_month = date('m');
     
     $today = date ("Y-m-d");
-    echo $today;
     echo "<br>";
     if($cmd == 'update') {
         $no = $_GET['no'];
@@ -40,17 +39,17 @@
     }
 
     ?>
+    
     <div class = 'all'>
+    <a href="member_list.php">memberlist </a><br>
     <a href="calendarr.php?this_year= <?=$this_year-1 ?>&this_month=<?= $this_month ?> ">작년 </a>
     <a href="calendarr.php?this_year= <?=$today_year ?>&this_month=<?= $today_month ?> ">현재 </a>
     <a href="calendarr.php?this_year= <?=$this_year+1 ?>&this_month=<?= $this_month ?> ">내년 </a>
     
     
-
-    <?php
+<?
     echoCalendar($this_year,$this_month);
-    ?>
-
+?>
 
 
 
@@ -59,7 +58,7 @@
     <?php
     $sql = "SELECT * FROM calendar where year =$this_year and month=$this_month";
     $result = mysqli_query($db,$sql);
-
+    
     while($rows= mysqli_fetch_assoc($result)) {
         echo $rows['memo'];
         echo "<a class= 'button' href='live_prc.php?cmd=delete&no={$rows['no']}'>삭제</a>";
@@ -73,7 +72,16 @@
     <form method='get' action='live_prc.php'>  
         <input type='hidden' name='cmd' value='<?= $cmd ?>'/>  <!-- <  ? =  는에코  -->
         <input type='hidden' name='no' value='<?= $no ?>'/> 
-        userid:<input type="text" name="userid" value='<?= $userid ?>' size="5"/> 
+        <select name='userid'>
+            <? 
+            $sql = "select userid from member";
+            $result = mysqli_query($db,$sql);
+                foreach($result as $i){
+                    echo "<option> ".$i['userid']."</option>";
+                }
+            ?>
+            <option value="<?=$userid?>"></option>
+        </select>
         <select name='year'>
             <?php for($i=1950; $i <= 2050; $i++){
                 if($i==$this_year){
